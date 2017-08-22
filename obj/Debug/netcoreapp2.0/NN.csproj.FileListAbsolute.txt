@@ -1,0 +1,10 @@
+/home/tygrak/Programming/Dotnet/NN/bin/Debug/netcoreapp2.0/NN.deps.json
+/home/tygrak/Programming/Dotnet/NN/bin/Debug/netcoreapp2.0/NN.runtimeconfig.json
+/home/tygrak/Programming/Dotnet/NN/bin/Debug/netcoreapp2.0/NN.runtimeconfig.dev.json
+/home/tygrak/Programming/Dotnet/NN/bin/Debug/netcoreapp2.0/NN.dll
+/home/tygrak/Programming/Dotnet/NN/bin/Debug/netcoreapp2.0/NN.pdb
+/home/tygrak/Programming/Dotnet/NN/obj/Debug/netcoreapp2.0/NN.csproj.CoreCompileInputs.cache
+/home/tygrak/Programming/Dotnet/NN/obj/Debug/netcoreapp2.0/NN.AssemblyInfoInputs.cache
+/home/tygrak/Programming/Dotnet/NN/obj/Debug/netcoreapp2.0/NN.AssemblyInfo.cs
+/home/tygrak/Programming/Dotnet/NN/obj/Debug/netcoreapp2.0/NN.dll
+/home/tygrak/Programming/Dotnet/NN/obj/Debug/netcoreapp2.0/NN.pdb
