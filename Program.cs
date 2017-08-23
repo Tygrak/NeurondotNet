@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Drawing;
+using System.Collections.Generic;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
@@ -8,36 +9,35 @@ using MathNet.Numerics.LinearAlgebra.Double;
 namespace NN{
     class Program{
         static void Main(string[] args){
-            /*Matrix<double> a = DenseMatrix.Create(4, 3, 0);
-            a[0, 0] = 1;
-            a[1, 2] = 1;
-            a[2, 0] = 1;
-            a[3, 1] = 1;
-            Console.WriteLine(a);
-            int[] classa = MatrixHelpers.OutputToClass(a);
-            for(int i = 0; i < classa.Length; i++){
-                Console.WriteLine(classa[i]);
-            }
-            var b = MatrixHelpers.ClassToOutput(classa, 3);
-            Console.WriteLine(b);*/
+            Matrix<double> trainingFeatures;
+            Matrix<double> trainingOutput;
+            MatrixHelpers.ReadDataFile(@"iris_data_files/iris_training.dat", 4, 3, out trainingFeatures, out trainingOutput);
+            NeuronNetwork nn = new NeuronNetwork(new int[]{4, 3, 3, 3});
+            nn.Train(trainingFeatures, trainingOutput, 10000, 2.5);
+            nn.PredictOutput(new double[]{0.813331, 0.692682, 0.854032, 0.975}, new double[]{0, 0, 1});
+            double[] output = nn.GetOutput();
+            Console.WriteLine("The networks output for input 0.813331, 0.692682, 0.854032, 0.975 is: " + MatrixHelpers.OutputToString(output));
+            /*double[] testPredict = nn.PredictOutput(new double[]{0.813331, 0.692682, 0.854032, 0.975});
+            Console.WriteLine("Networks prediction for values (0.813331, 0.692682, 0.854032, 0.975):");
+            for (int i = 0; i < testPredict.Length; i++){
+                Console.WriteLine(testPredict[i]);
+            }*/
             Matrix<double> testFeatures;
             Matrix<double> testOutput;
             MatrixHelpers.ReadDataFile(@"iris_data_files/iris_test.dat", 4, 3, out testFeatures, out testOutput);
-            NeuronNetwork nn = new NeuronNetwork(4, 2, 3, 0.05);
-            double[] input = new double[]{0.282131, 0.269205, 0.430645, 0.427485}; 
-            double[] output = nn.CalculateOutput(input);
-            double[] actualOutput = new double[]{0, 1, 0};
-            double[] outputError = MatrixHelpers.CalculateOutputError(output, actualOutput);
-            Console.WriteLine("Output: " + output[0].ToString() + ", " + output[1].ToString() + ", " + output[2].ToString());
-            Console.WriteLine("Actual output: " + actualOutput[0].ToString() + ", " + actualOutput[1].ToString() + ", " + actualOutput[2].ToString());
-            Console.WriteLine("Error: " + MatrixHelpers.CalculateError(output, actualOutput).ToString());
-            Console.WriteLine("Output error: " + outputError[0].ToString() + ", " + outputError[1].ToString() + ", " + outputError[2].ToString());
-            //Console.WriteLine(testFeatures);
-            //Console.WriteLine(testOutput);
+            Console.WriteLine("The networks error for the test set is: " + nn.CalculateSetError(testFeatures, testOutput).ToString("0.0000"));
         }
     }
 
     public class MatrixHelpers{
+        public static string OutputToString(double[] output){
+            string s = output[0].ToString("0.0000");
+            for (int i = 1; i < output.Length; i++){
+                s += ", " + output[i].ToString("0.0000");
+            }
+            return s;
+        }
+
         public static int[] OutputToClass(Matrix<double> output){
             int[] classArr = new int[output.RowCount];
             for(int i = 0; i < output.RowCount; i++){
@@ -74,6 +74,9 @@ namespace NN{
             }
         }
 
+        public static double HyperTanActivation(double input){
+            return (Math.Tanh(input)+1)/2;
+        }
         public static double[] HyperTanActivation(double[] inMatrix){
             for(int i = 0; i < inMatrix.Length; i++){
                 inMatrix[i] = (Math.Tanh(inMatrix[i])+1)/2;
@@ -87,6 +90,9 @@ namespace NN{
                 }
             }
             return inMatrix;
+        }
+        public static double HyperTanActivationDer(double input){
+            return (1-Math.Pow(Math.Tanh(input), 2))/2;
         }
         public static double[] HyperTanActivationDer(double[] inMatrix){
             for(int i = 0; i < inMatrix.Length; i++){
